@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  */
 @RestController
-public class UserController {
+public class UserInfoController {
 
-    public UserController() {
+    public UserInfoController() {
     }
 
     @Autowired
