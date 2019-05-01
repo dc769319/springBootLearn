@@ -4,6 +4,7 @@ import com.charles.demo.models.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/users")
@@ -36,8 +37,17 @@ public class UserController {
     public String updateUser(@PathVariable Long id, @ModelAttribute User user) {
         // 处理"/users/{id}"的PUT请求，用来更新User信息
         User u = users.get(id);
-        u.setName(user.getName());
-        u.setAge(user.getAge());
+        if (null == u) {
+            return "Invalid param id";
+        }
+        String name = user.getName();
+        Integer age = user.getAge();
+        if (null != name) {
+            u.setName(user.getName());
+        }
+        if (null != age && 0 != age) {
+            u.setAge(user.getAge());
+        }
         return "success";
     }
 
@@ -46,5 +56,14 @@ public class UserController {
         // 处理"/users/{id}"的DELETE请求，用来删除User
         users.remove(id);
         return "success";
+    }
+
+    /**
+     * 访问/users/hello时，方法抛出异常，这时会调用全局异常处理方法
+     * @throws Exception 执行时异常
+     */
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    public void hello() throws Exception {
+        throw new Exception("发生错误");
     }
 }
